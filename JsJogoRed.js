@@ -45,7 +45,7 @@ function ativarExplosao() {
 function ativarMudaFundo() {
     if (!gamescreen) return;
 
-    gamescreen.style.backgroundImage = "url('./images/checkmate.gif')";
+    gamescreen.style.backgroundImage = "url('./checkmate.gif')";
     gamescreen.style.backgroundSize = "cover";
     gamescreen.style.backgroundPosition = "center";
     gamescreen.style.backgroundRepeat = "no-repeat";
