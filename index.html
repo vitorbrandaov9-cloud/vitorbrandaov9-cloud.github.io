@@ -3,49 +3,56 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="style.css" />
-    <title>Beba água</title>
+    <title>Página inicial</title>
+    <style>
+      * {
+        box-sizing: border-box;
+      }
+
+      body {
+        min-height: 100vh;
+        margin: 0;
+        display: grid;
+        place-items: center;
+        font-family: Arial, sans-serif;
+        background: #f2f6ff;
+        color: #1e293b;
+      }
+
+      main {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: min(320px, calc(100% - 32px));
+        text-align: center;
+      }
+
+      h1 {
+        margin: 0 0 8px;
+      }
+
+      .botao {
+        display: block;
+        padding: 14px 20px;
+        border-radius: 8px;
+        background: #2563eb;
+        color: #fff;
+        text-decoration: none;
+        font-weight: bold;
+        transition: 0.2s;
+      }
+
+      .botao:hover {
+        background: #1d4ed8;
+        transform: translateY(-2px);
+      }
+    </style>
   </head>
   <body>
-    <h1>Água</h1>
-    <h3>Objetivo: 2 L</h3>
-
-    <div class="cup">
-      <div class="restante" id="restante">
-        <span id="litros"></span>
-        <small>restantes</small>
-      </div>
-
-      <div class="porcentagem" id="porcentagem"></div>
-      <div class="agua-caindo" aria-hidden="true">
-        <span class="gota gota-1"></span>
-        <span class="gota gota-2"></span>
-        <span class="gota gota-3"></span>
-        <span class="gota gota-4"></span>
-      </div>
-    </div>
-
-    <p class="text">Selecione quantos copos você quer beber</p>
-
-    <div class="cups">
-      <div class="cup cup-false">250 ml</div>
-      <div class="cup cup-small">250 ml</div>
-      <div class="cup cup-small">250 ml</div>
-      <div class="cup cup-small">250 ml</div>
-      <div class="cup cup-small">250 ml</div>
-      <div class="cup cup-small">250 ml</div>
-      <div class="cup cup-small">250 ml</div>
-      <div class="cup cup-small">250 ml</div>
-      <div class="cup cup-small">250 ml</div>
-       <div class="cup cup-small">250 ml</div>
-        <div class="cup cup-small">250 ml</div>
-      <div class="cup cup-false">250 ml</div>
-    </div>
-
-    <div class="easteregg" id="easteregg" aria-hidden="true">
-      <img src= "images.jpg" alt="Easter egg" >
-    </div>
-
-    <script src="script.js"></script>
+    <main>
+      <h1>Menu principal</h1>
+      <a class="botao" href="agua.html">Beba água</a>
+      <a class="botao" href="aulaJs.html">Aula JS</a>
+    </main>
   </body>
 </html>

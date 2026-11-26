@@ -39,7 +39,7 @@ falseCups.forEach(cup => {
 })
 
 function easteregg() {
-    if(clique > 10 && !eastereggAtivado) {
+    if(clique > 3 && !eastereggAtivado) {
         eastereggAtivado = true
         eastereggOverlay.classList.remove('active')
         void eastereggOverlay.offsetWidth
@@ -108,7 +108,7 @@ function updateBigCup() {
 }
 
 let audioCtx;
-let osc1, osc2, lfo;
+let osc1, osc2, lfo, noiseSource;
 
 function iniciarAmbiente() {
     if(!audioCtx) {
@@ -122,36 +122,63 @@ function iniciarAmbiente() {
     if(osc1) return;
 
     const gainNode = audioCtx.createGain();
-    gainNode.gain.value = 0.25;
+    gainNode.gain.value = 0.16;
 
     osc1 = audioCtx.createOscillator();
     osc1.type = 'sawtooth';
-    osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
+    osc1.frequency.setValueAtTime(220, audioCtx.currentTime);
 
     osc2 = audioCtx.createOscillator();
-    osc2.type = 'sawtooth';
-    osc2.frequency.setValueAtTime(56.5, audioCtx.currentTime);
+    osc2.type = 'triangle';
+    osc2.frequency.setValueAtTime(225.5, audioCtx.currentTime);
 
     lfo = audioCtx.createOscillator();
-    lfo.frequency.value = 0.4;
+    lfo.frequency.value = 1.7;
 
     const lfoGain = audioCtx.createGain();
-    lfoGain.gain.value = 4;
+    lfoGain.gain.value = 0.09;
     lfo.connect(lfoGain);
-    lfoGain.connect(osc2.frequency);
+    lfoGain.connect(gainNode.gain);
 
     const filtro = audioCtx.createBiquadFilter();
     filtro.type = 'lowpass';
-    filtro.frequency.value = 220;
+    filtro.frequency.value = 900;
+    filtro.Q.value = 12;
 
     osc1.connect(filtro);
     osc2.connect(filtro);
     filtro.connect(gainNode);
+
+    const noiseLength = audioCtx.sampleRate * 2;
+    const noiseBuffer = audioCtx.createBuffer(1, noiseLength, audioCtx.sampleRate);
+    const noiseData = noiseBuffer.getChannelData(0);
+
+    for(let i = 0; i < noiseLength; i++) {
+        noiseData[i] = (Math.random() * 2 - 1) * (1 - i / noiseLength * 0.7);
+    }
+
+    noiseSource = audioCtx.createBufferSource();
+    noiseSource.buffer = noiseBuffer;
+    noiseSource.loop = true;
+
+    const noiseFilter = audioCtx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.value = 1500;
+    noiseFilter.Q.value = 3;
+
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.value = 0.035;
+
+    noiseSource.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(audioCtx.destination);
+
     gainNode.connect(audioCtx.destination);
 
     osc1.start();
     osc2.start();
     lfo.start();
+    noiseSource.start();
 }
 
 function tocarSusto() {
@@ -164,21 +191,59 @@ function tocarSusto() {
     }
 
     const agora = audioCtx.currentTime;
-    const oscSusto = audioCtx.createOscillator();
+    const compressor = audioCtx.createDynamicsCompressor();
+    compressor.threshold.value = -12;
+    compressor.knee.value = 4;
+    compressor.ratio.value = 12;
+    compressor.attack.value = 0.005;
+    compressor.release.value = 0.25;
+    compressor.connect(audioCtx.destination);
+
     const gainSusto = audioCtx.createGain();
+    gainSusto.gain.setValueAtTime(0.001, agora);
+    gainSusto.gain.linearRampToValueAtTime(0.9, agora + 0.025);
+    gainSusto.gain.exponentialRampToValueAtTime(0.08, agora + 0.55);
+    gainSusto.gain.exponentialRampToValueAtTime(0.001, agora + 1.2);
+    gainSusto.connect(compressor);
 
-    oscSusto.type = 'square';
-    oscSusto.frequency.setValueAtTime(1400, agora);
-    oscSusto.frequency.exponentialRampToValueAtTime(120, agora + 0.6);
+    [90, 180, 720].forEach((frequencia, index) => {
+        const osc = audioCtx.createOscillator();
+        osc.type = index === 2 ? 'square' : 'sawtooth';
+        osc.frequency.setValueAtTime(frequencia * 8, agora);
+        osc.frequency.exponentialRampToValueAtTime(frequencia, agora + 0.8);
+        osc.detune.setValueAtTime(index === 1 ? 18 : -12, agora);
+        osc.connect(gainSusto);
+        osc.start(agora);
+        osc.stop(agora + 1.2);
+    });
 
-    gainSusto.gain.setValueAtTime(0.6, agora);
-    gainSusto.gain.exponentialRampToValueAtTime(0.01, agora + 0.8);
+    const noiseLength = audioCtx.sampleRate * 1.2;
+    const noiseBuffer = audioCtx.createBuffer(1, noiseLength, audioCtx.sampleRate);
+    const data = noiseBuffer.getChannelData(0);
 
-    oscSusto.connect(gainSusto);
-    gainSusto.connect(audioCtx.destination);
+    for(let i = 0; i < noiseLength; i++) {
+        data[i] = Math.random() * 2 - 1;
+    }
 
-    oscSusto.start(agora);
-    oscSusto.stop(agora + 0.8);
+    const noise = audioCtx.createBufferSource();
+    noise.buffer = noiseBuffer;
+
+    const noiseFilter = audioCtx.createBiquadFilter();
+    noiseFilter.type = 'bandpass';
+    noiseFilter.frequency.value = 1300;
+    noiseFilter.Q.value = 0.8;
+
+    const noiseGain = audioCtx.createGain();
+    noiseGain.gain.setValueAtTime(0.001, agora);
+    noiseGain.gain.linearRampToValueAtTime(0.75, agora + 0.03);
+    noiseGain.gain.exponentialRampToValueAtTime(0.001, agora + 0.9);
+
+    noise.connect(noiseFilter);
+    noiseFilter.connect(noiseGain);
+    noiseGain.connect(compressor);
+
+    noise.start(agora);
+    noise.stop(agora + 1);
 }
 
 function pararTudo() {
@@ -186,8 +251,10 @@ function pararTudo() {
         osc1.stop();
         osc2.stop();
         lfo.stop();
+        if(noiseSource) noiseSource.stop();
         osc1 = null;
         osc2 = null;
         lfo = null;
+        noiseSource = null;
     }
 }
