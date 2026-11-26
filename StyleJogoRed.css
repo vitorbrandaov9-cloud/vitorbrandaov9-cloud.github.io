@@ -1,0 +1,167 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.gamescreen {
+    width: 80%;
+    height: 600px;
+    border: 1px solid black;
+    margin: 0 auto;
+    position: relative;
+    overflow: hidden;
+    background-image: url('./images/aluasecreta.jpg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+
+
+/*missil*/
+.missil-hitbox {
+    position: absolute;
+    bottom: 0;
+    border: 1px solid rgb(174, 0, 255);
+    width: 240px;
+    height: 120px;
+    animation: missilAnimation 5.5s linear infinite;
+}
+
+.missil{
+    position: absolute;
+    bottom: 0;
+    border: 1px solid red;
+    width: 400px;
+    display: block;
+}
+/*missil*/
+.bola{
+    position: absolute;
+    bottom: 0;
+    width: 80px;
+   border: 1px solid rgb(0, 34, 255);
+    transform-origin: center bottom;
+   
+}
+
+.Pulo {
+      animation: PuloAnimation 1.2s linear ;
+}
+
+.explosion {
+    position: absolute;
+    bottom: 0;
+    width: 80px;
+    border: 1px solid rgb(17, 255, 0);
+    display: none;
+    transform-origin: center bottom;
+    pointer-events: none;
+    
+}
+
+.explosion.ativo {
+    display: block;
+    animation: explosionAnimation 0.8s ease-out forwards;
+
+}
+
+@keyframes missilAnimation {
+    0% {
+        bottom: 0;
+        right: -400px;
+    }
+    20% {
+        bottom: 25%;
+        right: 20%;
+        transform: rotate(30deg);
+    }
+    25% {
+        bottom: 200000000%;
+        right: 30%;
+                transform: rotate(75deg);
+
+    }
+    40% {
+        bottom: 55%;
+        right: 95%;
+        transform: rotate(-775deg);
+    }
+    
+    65% {
+        bottom: 0;
+        right: 1200px;
+    }
+       70% {
+        bottom: 55%;
+        right: 100%;
+        transform: rotate(775deg);
+         transform: scaleY(1);
+          transform: scaleX(1);
+    }
+       75% {
+        bottom: 25%;
+        right: 95%;
+        transform: rotate(-775deg);
+         transform: scaleY(1.5);
+          transform: scaleX(1.5);
+    }
+       80% {
+        bottom: 35%;
+        right: 25%;
+        transform: rotate(775deg);
+         transform: scaleY(2);
+          transform: scaleX(2);
+    }
+       100% {
+        bottom: 55%;
+        right: -400 px;
+        transform: rotate(-775deg);
+    }
+}
+
+@keyframes PuloAnimation {
+    0% {
+        bottom: 0;
+        transform: scaleY(1);
+    }
+20% {
+        bottom: 18%;
+        transform: scaleY(0.82);
+    }
+    40% {
+        bottom: 60%;
+        transform: scaleY(1.12);
+    }
+    50% {
+        bottom: 70%;
+        transform: scaleY(1);
+    }
+    65% {
+        bottom: 60%;
+        transform: scaleY(1.12);
+    }
+    75% {
+        bottom: 44%;
+        transform: scaleY(0.95);
+    }
+    100% {
+        bottom: 0;
+        transform: scaleY(1);
+    }
+}
+
+@keyframes explosionAnimation {
+    0% {
+        bottom: 0;
+        transform: scaleY(1) scaleX(1);
+        opacity: 1;
+    }
+    100% {
+        bottom: 20px;
+        transform: scaleY(10) scaleX(10);
+        opacity: 0;
+    }
+}
+
