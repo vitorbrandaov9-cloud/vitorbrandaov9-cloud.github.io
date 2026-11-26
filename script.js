@@ -39,7 +39,7 @@ falseCups.forEach(cup => {
 })
 
 function easteregg() {
-    if(clique > 3 && !eastereggAtivado) {
+    if(clique > 9 && !eastereggAtivado) {
         eastereggAtivado = true
         eastereggOverlay.classList.remove('active')
         void eastereggOverlay.offsetWidth
