@@ -1,12 +1,64 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Aula JavaScript</title>
-  </head>
-  <body>
-    <h1>Aula JavaScript</h1>
-    <a href="index.html">Voltar</a>
-  </body>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="Styleaula.css">
+    <title>Document</title>
+</head>
+<body>
+    <div class="tela-jogo">
+       
+
+     <button id="iniciar" onclick="neoText()">Jogar
+
+
+
+
+    </div>
+    <img id="bola" onmouseover="moverBola()" style="height: 100px; margin-top: 500px; position: relative;" src="circulo.webp">
+   <img  src="kaboom.jpg" height="40px" width="800"> <a id="teste"> oi galera</a>
+   <script>
+        function neoText(){
+    document.getElementById("iniciar").innerHTML = "Tem certeza disto?"}
+bolal = document.getElementById("bola")
+
+function moverBola(){
+    indi = document.getElementById("teste")
+
+var i = 0
+var b = 0
+
+
+
+
+function movimentoo(){
+    alert("alerta")
+
+
+
+intervalo = setInterval(function(){
+bolal.style.bottom = i+"px"
+i+= 10
+indi.innerHTML=i
+if (i==580){
+    clearInterval(intervalo)
+    outrointer = setInterval(function(){
+        bolal.style.bottom = i+"px"
+i-= 10
+b+=10
+indi.innerHTML=i+b
+if (i ==0){
+    clearInterval(outrointer)
+}
+    },10)
+
+}
+}, 10)
+
+
+
+}movimentoo()}
+        </script>
+</body>
 </html>

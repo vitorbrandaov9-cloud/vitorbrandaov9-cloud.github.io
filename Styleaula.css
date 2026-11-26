@@ -1,0 +1,21 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+.tela-jogo{
+    width: 90%;
+    height: 5000px;
+    border: 100px black;
+    margin: 0 auto;
+    position: relative;
+}
+
+*bola{
+position: absolute;
+bottom: 0;
+width: 80px
+}  
+*iniciar{
+  color: red;
+}
