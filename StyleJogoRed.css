@@ -23,7 +23,7 @@
 .missil-hitbox {
     position: absolute;
     bottom: 0;
-    border: 1px solid rgb(174, 0, 255);
+
     width: 240px;
     height: 120px;
     animation: missilAnimation 5.5s linear infinite;
@@ -32,7 +32,7 @@
 .missil{
     position: absolute;
     bottom: 0;
-    border: 1px solid red;
+
     width: 400px;
     display: block;
 }
@@ -41,7 +41,7 @@
     position: absolute;
     bottom: 0;
     width: 80px;
-   border: 1px solid rgb(0, 34, 255);
+ 
     transform-origin: center bottom;
    
 }
