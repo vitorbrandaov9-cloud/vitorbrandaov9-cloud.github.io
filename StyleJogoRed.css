@@ -54,7 +54,7 @@
     position: absolute;
     bottom: 0;
     width: 80px;
-    border: 1px solid rgb(17, 255, 0);
+  
     display: none;
     transform-origin: center bottom;
     pointer-events: none;
