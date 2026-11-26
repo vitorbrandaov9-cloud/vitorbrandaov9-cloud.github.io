@@ -45,6 +45,11 @@ function easteregg() {
         void eastereggOverlay.offsetWidth
         eastereggOverlay.classList.add('active')
         eastereggOverlay.setAttribute('aria-hidden', 'false')
+
+        iniciarAmbiente()
+        tocarSusto()
+
+        window.setTimeout(pararTudo, 6000)
     }
 }
 
@@ -99,5 +104,90 @@ function updateBigCup() {
 
         restante.style.visibility = 'visible'
         litros.innerText = `${Number(litersRemaining.toFixed(2))}L`
+    }
+}
+
+let audioCtx;
+let osc1, osc2, lfo;
+
+function iniciarAmbiente() {
+    if(!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    if(audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    if(osc1) return;
+
+    const gainNode = audioCtx.createGain();
+    gainNode.gain.value = 0.25;
+
+    osc1 = audioCtx.createOscillator();
+    osc1.type = 'sawtooth';
+    osc1.frequency.setValueAtTime(55, audioCtx.currentTime);
+
+    osc2 = audioCtx.createOscillator();
+    osc2.type = 'sawtooth';
+    osc2.frequency.setValueAtTime(56.5, audioCtx.currentTime);
+
+    lfo = audioCtx.createOscillator();
+    lfo.frequency.value = 0.4;
+
+    const lfoGain = audioCtx.createGain();
+    lfoGain.gain.value = 4;
+    lfo.connect(lfoGain);
+    lfoGain.connect(osc2.frequency);
+
+    const filtro = audioCtx.createBiquadFilter();
+    filtro.type = 'lowpass';
+    filtro.frequency.value = 220;
+
+    osc1.connect(filtro);
+    osc2.connect(filtro);
+    filtro.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+
+    osc1.start();
+    osc2.start();
+    lfo.start();
+}
+
+function tocarSusto() {
+    if(!audioCtx) {
+        audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    }
+
+    if(audioCtx.state === 'suspended') {
+        audioCtx.resume();
+    }
+
+    const agora = audioCtx.currentTime;
+    const oscSusto = audioCtx.createOscillator();
+    const gainSusto = audioCtx.createGain();
+
+    oscSusto.type = 'square';
+    oscSusto.frequency.setValueAtTime(1400, agora);
+    oscSusto.frequency.exponentialRampToValueAtTime(120, agora + 0.6);
+
+    gainSusto.gain.setValueAtTime(0.6, agora);
+    gainSusto.gain.exponentialRampToValueAtTime(0.01, agora + 0.8);
+
+    oscSusto.connect(gainSusto);
+    gainSusto.connect(audioCtx.destination);
+
+    oscSusto.start(agora);
+    oscSusto.stop(agora + 0.8);
+}
+
+function pararTudo() {
+    if(osc1) {
+        osc1.stop();
+        osc2.stop();
+        lfo.stop();
+        osc1 = null;
+        osc2 = null;
+        lfo = null;
     }
 }
